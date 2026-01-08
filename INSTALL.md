@@ -36,45 +36,6 @@ for test generation examples.
 | tests.yaml | Language-agnostic test cases |
 | VERIFY.md | Post-implementation verification checklist |
 
-## Language-specific guidance
-
-Agents should make idiomatic choices:
-
-**Python:**
-- Accept `datetime` objects and Unix timestamps
-- Use `pytest` for testing
-- Raise `ValueError` for errors
-
-**TypeScript:**
-- Accept `Date` objects and numbers
-- Use `vitest` or `jest` for testing
-- Throw `Error` for invalid input
-
-**Rust:**
-- Use `chrono` for datetime handling
-- Return `Result<String, ParseError>`
-- Use standard `#[test]` attributes
-
-**Go:**
-- Use `time.Time` and `time.Duration`
-- Return `(string, error)` tuples
-- Use standard `testing` package
-
-**Ruby:**
-- Accept `Time` objects and integers
-- Use `rspec` or `minitest`
-- Raise `ArgumentError` for errors
-
-**Java:**
-- Accept `Instant`, `LocalDateTime`, and `long` timestamps
-- Use JUnit 5 for testing
-- Throw `IllegalArgumentException` for errors
-
-**Swift:**
-- Accept `Date` objects and `TimeInterval`
-- Use XCTest for testing
-- Throw custom errors or return optionals
-
 ## Verification
 
 After generation, run the test suite. All tests must pass:

@@ -20,6 +20,27 @@ All functions are pure—no side effects, no I/O, no system clock access. The re
 
 ---
 
+## Output Structure
+
+Generate the minimal files needed to use and test the library. Do not create package distribution scaffolding.
+
+**Do generate:**
+- Library source file(s)
+- Test file(s)
+- usage.md
+
+**Do not generate:**
+- setup.py, pyproject.toml with build/publish metadata (Python)
+- Publishable Cargo.toml fields like description, license, repository, keywords (Rust—keep only `[package]` name, version, edition)
+- package.json with publish config (Node)
+- gemspec files (Ruby)
+- go.mod with module paths pointing to repositories (Go—use a simple local module name)
+- Any CI/CD configuration, GitHub Actions, etc.
+
+The goal is a working implementation that can be copied into a project, not a publishable package.
+
+---
+
 ## Type Conventions
 
 Since this spec targets multiple languages, types are described abstractly:
@@ -35,7 +56,6 @@ Since this spec targets multiple languages, types are described abstractly:
 ### Timestamp normalization
 
 When a function receives a `timestamp`:
-
 1. If integer/float: treat as Unix seconds
 2. If ISO 8601 string: parse to Unix seconds (error if invalid)
 3. If language-native datetime: convert to Unix seconds
@@ -46,7 +66,7 @@ Implementations may accept milliseconds if clearly documented, but the spec test
 
 ## Error Handling
 
-Errors should be reported idiomatically for the target language. For example:
+Errors should be reported idiomatically for the target language:
 
 | Language | Error style |
 |----------|-------------|
@@ -68,8 +88,6 @@ Errors should be reported idiomatically for the target language. For example:
 
 When in doubt, be liberal in inputs (accept reasonable variations) and strict in outputs (always return spec-compliant strings).
 
-Further, follow the conventions in the project you're working with, where possible. Investigate the codebase (if present) to determine local error handling conventions.
-
 ---
 
 ## Timezone Handling
@@ -77,7 +95,6 @@ Further, follow the conventions in the project you're working with, where possib
 **For relative functions (`timeago`, `duration`, `parse_duration`):** Timezones don't matter. These operate on durations between timestamps.
 
 **For calendar functions (`human_date`, `date_range`):**
-
 - Timestamps are instants in time (UTC)
 - The output depends on which calendar day that instant falls on
 - By default, interpret timestamps in **UTC**
@@ -369,6 +386,78 @@ Implementations MAY include additional tests beyond tests.yaml, but:
 
 ---
 
+## Generated Documentation
+
+Implementations MUST include a `usage.md` file documenting how to use the library in the target language.
+
+### usage.md requirements
+
+The file should be concise and practical. Include:
+
+1. **Installation** — How to add the library to a project (import path, package name, etc.)
+
+2. **Quick start** — Minimal code example showing basic usage of each function
+
+3. **Function reference** — For each function:
+   - Signature in target language syntax
+   - Parameter types and descriptions
+   - Return type
+   - One or two examples
+
+4. **Error handling** — How errors are reported and how to handle them idiomatically
+
+5. **Type conversions** — What datetime types the library accepts beyond Unix timestamps
+
+### usage.md template
+
+```markdown
+# whenwords for [LANGUAGE]
+
+Human-friendly time formatting and parsing.
+
+## Installation
+
+[How to import/require/add the library]
+
+## Quick start
+
+[5-10 line example showing typical usage]
+
+## Functions
+
+### timeago(timestamp, reference?) → string
+
+[Signature, parameters, examples]
+
+### duration(seconds, options?) → string
+
+[Signature, parameters, examples]
+
+### parse_duration(string) → number
+
+[Signature, parameters, examples]
+
+### human_date(timestamp, reference?) → string
+
+[Signature, parameters, examples]
+
+### date_range(start, end) → string
+
+[Signature, parameters, examples]
+
+## Error handling
+
+[Language-specific error handling patterns]
+
+## Accepted types
+
+[What types each function accepts]
+```
+
+Keep it under 150 lines. Developers should be able to skim it in under a minute.
+
+---
+
 ## Implementation Checklist
 
 Before considering the implementation complete:
@@ -381,6 +470,7 @@ Before considering the implementation complete:
 - [ ] Future times return "in X" not "X ago"
 - [ ] Zero duration returns "0 seconds"
 - [ ] Code is idiomatic for target language
+- [ ] usage.md generated with function signatures and examples
 
 ---
 
