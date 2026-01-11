@@ -1,4 +1,15 @@
+# General
 examples/
+
+# TypeScript/Node
 node_modules/
 dist/
 package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.pytest_cache/

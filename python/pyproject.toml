@@ -1,0 +1,9 @@
+[project]
+name = "whenwords"
+version = "0.1.0"
+description = "Human-friendly time formatting and parsing"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
